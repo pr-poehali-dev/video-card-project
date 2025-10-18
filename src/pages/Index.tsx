@@ -166,7 +166,7 @@ const Index = () => {
 
       <footer className="bg-white/80 backdrop-blur-sm border-t border-border mt-16 py-8">
         <div className="container mx-auto px-4 text-center text-muted-foreground">
-          <p>Сделано с любовью для самого лучшего мужа ❤️</p>
+          <p>Сделано с любовью ❤️</p>
         </div>
       </footer>
     </div>
