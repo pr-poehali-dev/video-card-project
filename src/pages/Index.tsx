@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
@@ -13,6 +13,8 @@ const Index = () => {
   const [newName, setNewName] = useState('');
   const [newWish, setNewWish] = useState('');
   const [activeSection, setActiveSection] = useState<'home' | 'wishes'>('home');
+  const [videoUrl, setVideoUrl] = useState<string>('');
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleAddWish = () => {
     if (newName.trim() && newWish.trim()) {
@@ -20,6 +22,18 @@ const Index = () => {
       setNewName('');
       setNewWish('');
     }
+  };
+
+  const handleVideoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const url = URL.createObjectURL(file);
+      setVideoUrl(url);
+    }
+  };
+
+  const handleVideoUrlChange = (url: string) => {
+    setVideoUrl(url);
   };
 
   return (
@@ -60,17 +74,69 @@ const Index = () => {
 
           <Card className="max-w-4xl mx-auto overflow-hidden shadow-2xl animate-scale-in">
             <CardContent className="p-0">
-              <div className="relative aspect-video bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
-                <div className="text-center p-8">
-                  <Icon name="Video" size={64} className="mx-auto mb-4 text-primary" />
-                  <p className="text-lg text-muted-foreground mb-4">
-                    Видео-поздравление от семьи
-                  </p>
-                  <p className="text-sm text-muted-foreground">
-                    Здесь будет размещено видео-поздравление от родственников
-                  </p>
+              {videoUrl ? (
+                <div className="relative aspect-video bg-black">
+                  <video
+                    src={videoUrl}
+                    controls
+                    className="w-full h-full"
+                  >
+                    Ваш браузер не поддерживает видео
+                  </video>
+                  <Button
+                    onClick={() => setVideoUrl('')}
+                    variant="secondary"
+                    size="sm"
+                    className="absolute top-4 right-4 gap-2"
+                  >
+                    <Icon name="Trash2" size={16} />
+                    Удалить
+                  </Button>
                 </div>
-              </div>
+              ) : (
+                <div className="relative aspect-video bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
+                  <div className="text-center p-8 max-w-md">
+                    <Icon name="Video" size={64} className="mx-auto mb-4 text-primary" />
+                    <p className="text-lg font-semibold mb-4">
+                      Загрузите видео-поздравление
+                    </p>
+                    <div className="space-y-4">
+                      <Button
+                        onClick={() => fileInputRef.current?.click()}
+                        size="lg"
+                        className="gap-2"
+                      >
+                        <Icon name="Upload" size={18} />
+                        Выбрать файл с компьютера
+                      </Button>
+                      <input
+                        ref={fileInputRef}
+                        type="file"
+                        accept="video/*"
+                        onChange={handleVideoUpload}
+                        className="hidden"
+                      />
+                      <div className="relative">
+                        <div className="absolute inset-0 flex items-center">
+                          <span className="w-full border-t border-muted-foreground/20" />
+                        </div>
+                        <div className="relative flex justify-center text-xs uppercase">
+                          <span className="bg-gradient-to-br from-primary/20 to-secondary/20 px-2 text-muted-foreground">
+                            или
+                          </span>
+                        </div>
+                      </div>
+                      <div className="flex gap-2">
+                        <Input
+                          placeholder="Вставьте ссылку на видео (YouTube, Google Drive...)"
+                          onChange={(e) => handleVideoUrlChange(e.target.value)}
+                          className="bg-white"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
             </CardContent>
           </Card>
 
