@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import Icon from '@/components/ui/icon';
 
 const Index = () => {
-  const [videoUrl, setVideoUrl] = useState<string>('');
+  const [videoUrl, setVideoUrl] = useState<string>('https://drive.google.com/file/d/155dyfnZhIBTojwwFMtXm3p-2lfw9QRfd/preview');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleVideoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -36,22 +36,13 @@ const Index = () => {
           <CardContent className="p-0">
             {videoUrl ? (
               <div className="relative aspect-video bg-black">
-                <video
+                <iframe
                   src={videoUrl}
-                  controls
                   className="w-full h-full"
-                >
-                  Ваш браузер не поддерживает видео
-                </video>
-                <Button
-                  onClick={() => setVideoUrl('')}
-                  variant="secondary"
-                  size="sm"
-                  className="absolute top-4 right-4 gap-2"
-                >
-                  <Icon name="Trash2" size={16} />
-                  Удалить
-                </Button>
+                  allow="autoplay; encrypted-media"
+                  allowFullScreen
+                  title="Видео-поздравление"
+                />
               </div>
             ) : (
               <div className="relative aspect-video bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
